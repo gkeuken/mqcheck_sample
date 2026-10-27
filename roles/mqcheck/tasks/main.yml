@@ -16,8 +16,10 @@
 
       - name: Fail if existing queue found and force_qdel parameter not overridden
         ansible.builtin.fail:
-          msg: "ERROR!! {{ q_name }} already defined. To confirm DELETE rerun playbook with parameter: -e force_qdel=Yes"
-        when: force_qdel == False  
+          msg: "ERROR!! {{ q_name }} already defined. To confirm DELETE rerun playbook with parameter: -e force_qdel=yes"
+        when:
+          - force_qdel == False
+          - "'NO QUEUE FOUND MATCHING' not in q_check.stdout"
 
       - name: Delete existing Queue {{ q_name }} 
         ibm.ibm_zos_core.zos_operator:
